@@ -1,0 +1,28 @@
+.App {
+    padding: 30px;
+    display: flex;
+}
+
+.App > div {
+    margin: 0 auto;
+}
+
+.todo-list {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 30px 20px;
+    background-color: #d6dbef;
+    max-width: 1000px
+}
+
+h3 {
+    text-align: center;
+}
+
+button {
+    background: transparent;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+}

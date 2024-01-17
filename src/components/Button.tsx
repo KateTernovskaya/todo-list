@@ -1,0 +1,19 @@
+import React from 'react';
+
+type ButtonPropsType = {
+    content: string
+    onClickHandler: () => void
+    isDisabled?: boolean
+}
+export const Button: React.FC<ButtonPropsType> = (
+    {
+        content,
+        onClickHandler,
+        isDisabled,
+    }) => {
+    return (
+        <button
+            disabled={isDisabled}
+            onClick={onClickHandler}> {content} </button>
+    );
+};
