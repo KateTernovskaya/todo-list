@@ -3,26 +3,54 @@
     display: flex;
 }
 
-.App > div {
-    margin: 0 auto;
-}
-
 .todo-list {
     border: 1px solid black;
     border-radius: 5px;
     padding: 30px 20px;
     background-color: #d6dbef;
-    max-width: 1000px
+    width: 300px;
+    margin: 0 auto;
 }
 
-h3 {
-    text-align: center;
+.todo-list-title-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 button {
     background: transparent;
-    padding: 5px 15px;
+    padding: 7px 20px;
     cursor: pointer;
     margin: 5px;
     border-radius: 5px;
+    font-size: 14px;
+}
+
+.task {
+    font-size: 18px;
+}
+
+.task-done {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.btn-filter-active {
+    background-color: rgb(21, 146, 168);
+    border: 1px solid rgb(21, 146, 168);
+    color: white;
+    font-size: 16px;
+}
+
+.task-input-error {
+    border: 2px solid red;
+    outline: none;
+    height: 30px;
+    width: 200px;
+}
+
+.task-input {
+    height: 30px;
+    width: 200px;
 }
