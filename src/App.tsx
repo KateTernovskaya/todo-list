@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {v1} from 'uuid';
 import {TodoList} from "./components/TodoList";
+import {AddItemForm} from "./components/AddItemForm";
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodoListsType = {
@@ -41,7 +42,12 @@ function App() {
         setTodoLists(todoLists.filter(i => i.id !== todoListID))
         delete tasks[todoListID]
     }
-
+    function addTodoList(title: string) {
+        const todoListID = v1()
+        let newTodoList: TodoListsType = {id: todoListID, title, filter: 'all'};
+        setTodoLists([newTodoList, ...todoLists])
+        setTasks({...tasks, [todoListID]: []})
+    }
 
     //TASK
     function removeTask(todoListID: string, taskID: string) {
@@ -53,7 +59,7 @@ function App() {
         setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
     }
 
-    function changeStatus(todoListID: string, taskId: string, isDone: boolean) {
+    function changeTaskStatus(todoListID: string, taskId: string, isDone: boolean) {
         setTasks({...tasks, [todoListID]: tasks[todoListID].map(item => item.id === taskId ? {...item, isDone} : item)})
     }
 
@@ -71,7 +77,6 @@ function App() {
             tasksForTodolist = tasks[item.id].filter(t => t.isDone);
         }
 
-
         return (
             <TodoList key={item.id}
                       todoListID={item.id}
@@ -80,7 +85,7 @@ function App() {
                       removeTask={removeTask}
                       changeFilter={changeFilter}
                       addTask={addTask}
-                      changeTaskStatus={changeStatus}
+                      changeTaskStatus={changeTaskStatus}
                       filter={item.filter}
                       removeTodoList={removeTodoList}
             />
@@ -88,7 +93,10 @@ function App() {
     })
 
     return (
-        <div className="App">{mapTodoLists}</div>
+        <div className="App">
+            <AddItemForm callBack={addTodoList}/>
+            {mapTodoLists}
+        </div>
     );
 }
 
