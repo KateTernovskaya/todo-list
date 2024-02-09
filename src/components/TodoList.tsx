@@ -38,8 +38,6 @@ export function TodoList(props: TodoListPropsType) {
         }
     }
 
-
-    //  const countActiveTasksForHideMode = isHide ? getFilteredTasks(tasks, 'active').length : null
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
@@ -54,7 +52,6 @@ export function TodoList(props: TodoListPropsType) {
     const onAllClickHandler = () => props.changeFilter(props.todoListID, "all");
     const onActiveClickHandler = () => props.changeFilter(props.todoListID, "active");
     const onCompletedClickHandler = () => props.changeFilter(props.todoListID, "completed");
-
     const onClickHandlerRemoveTodoList = () => props.removeTodoList(props.todoListID)
 
     //MAP
@@ -64,8 +61,9 @@ export function TodoList(props: TodoListPropsType) {
             const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                 props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
             }
+            const taskClass = t.isDone ? 'task-done' : 'task'
 
-            return <li key={t.id} className={t.isDone ? "is-done" : ""}>
+            return <li key={t.id} className={taskClass}>
                 <input type="checkbox"
                        onChange={onChangeHandler}
                        checked={t.isDone}/>
@@ -77,6 +75,9 @@ export function TodoList(props: TodoListPropsType) {
         </ul>
         : <span>No tasks for this filter type</span>
 
+    //IsHide
+    const activeTasksCount = props.tasks.filter(task => !task.isDone).length;
+    const countActiveTasksForHideMode = isHide ? activeTasksCount : null
 
     return (
         <div className='todo-list'>
@@ -84,10 +85,9 @@ export function TodoList(props: TodoListPropsType) {
                 <h3>{props.title}</h3>
                 <Button content={isHide ? 'Show' : 'Hide'} onClickHandler={toggleHideTodoList}/>
                 <Button content={'x'} onClickHandler={onClickHandlerRemoveTodoList}/>
-
             </div>
 
-            {isHide && <div>{`There are ${props.tasks.length}  tasks in the Todo-List`}</div>}
+            {isHide && <div>{`There are ${countActiveTasksForHideMode} active tasks in the Todo-List`}</div>}
             {!isHide && <>
                 <div>
                     <input value={title}
