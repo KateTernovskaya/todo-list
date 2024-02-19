@@ -1,15 +1,22 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button} from "./button";
+
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import IconButton from "@mui/material/IconButton";
+import DoneIcon from '@mui/icons-material/Done';
+import TextField from "@mui/material/TextField";
 
 type EditableSpanPropsType = {
+
     oldTitle: string
     callBack: (newTitle: string) => void
+    iconColor?: "inherit" | "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
 }
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = (
     {
         oldTitle,
-        callBack
+        callBack,
+        iconColor
     }) => {
 
     const [edit, setEdit] = useState(false)
@@ -36,17 +43,34 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
         edit
             ?
             <>
-                <input value={newTitle}
-                       onBlur={editHandler}
-                       autoFocus
-                       onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}/>
-                <Button content={"1"} onClickHandler={editHandler}/>
+                <TextField id="outlined-basic"
+                           // error={!!error}
+                           // label={error ? error : "Enter text"}
+                           variant="standard"
+                           size='small'
+                           value={newTitle}
+                           onBlur={editHandler}
+                           autoFocus
+                           onChange={onChangeHandler}
+                           onKeyPress={onKeyPressHandler}
+                />
+                <IconButton aria-label="done change"
+                            onClick={editHandler}
+                            size="small"
+                            color={iconColor}>
+                    <DoneIcon fontSize="inherit"/>
+                </IconButton>
+
             </>
             :
             <>
                 <span> {oldTitle} </span>
-                <Button content={"1"} onClickHandler={editHandler}/>
+                <IconButton aria-label="edit task"
+                            onClick={editHandler}
+                            size="small"
+                            color={iconColor}>
+                    <ModeEditIcon fontSize="inherit"/>
+                </IconButton>
             </>
     );
 };

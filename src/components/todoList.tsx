@@ -1,8 +1,14 @@
 import React, {ChangeEvent, useState} from 'react';
 import {FilterValuesType} from "../App";
-import {Button} from "./button";
+import Button from '@mui/material/Button';
 import {AddItemForm} from "./addItemForm";
 import {EditableSpan} from "./editableSpan";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Checkbox from '@mui/material/Checkbox';
+
 
 type TaskType = {
     id: string
@@ -67,11 +73,14 @@ export function TodoList(props: TodoListPropsType) {
 
             return (
                 <li key={t.id} className={taskClass}>
-                    <input type="checkbox"
-                           onChange={onChangeTaskStatusHandler}
-                           checked={t.isDone}/>
+                    <Checkbox onChange={onChangeTaskStatusHandler} checked={t.isDone}/>
                     <EditableSpan oldTitle={t.title} callBack={updateTaskTitleHandler}/>
-                    <Button content={"x"} onClickHandler={RemoveTaskHandler}/>
+
+                    <IconButton aria-label="delete"
+                                onClick={RemoveTaskHandler}
+                                size="small">
+                        <DeleteIcon fontSize="inherit"/>
+                    </IconButton>
                 </li>)
         })}</ul>
         : <span>No tasks for this filter type</span>
@@ -82,25 +91,41 @@ export function TodoList(props: TodoListPropsType) {
     return (
         <div className='todo-list'>
             <div className={'todo-list-title-block'}>
-                <EditableSpan oldTitle={props.title} callBack={updateTodoListTitleHandler}/>
-                <Button content={isHide ? 'Show' : 'Hide'} onClickHandler={toggleHideTodoList}/>
-                <Button content={'x'} onClickHandler={removeTodoListHandler}/>
+                <EditableSpan oldTitle={props.title} callBack={updateTodoListTitleHandler} iconColor='primary'/>
+                <IconButton aria-label="hide tasks list"
+                            onClick={toggleHideTodoList}
+                            color='primary'>
+                    {isHide ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
+                </IconButton>
+
+                <IconButton aria-label="delete"
+                            onClick={removeTodoListHandler}
+                            color='primary'>
+                    <DeleteIcon/>
+                </IconButton>
             </div>
             {isHide && <div>{`There are ${countActiveTasksForHideMode} active tasks in the Todo-List`}</div>}
             {!isHide && <>
 
                 <AddItemForm callBack={addTaskHandler}/>
                 {taskItems}
-                <div>
-                    <Button classes={props.filter === 'all' ? "btn-filter-active" : ""}
-                            content='All'
-                            onClickHandler={onAllClickHandler}/>
-                    <Button classes={props.filter === 'active' ? "btn-filter-active" : ""}
-                            content='Active'
-                            onClickHandler={onActiveClickHandler}/>
-                    <Button classes={props.filter === 'completed' ? "btn-filter-active" : ""}
-                            content='Completed'
-                            onClickHandler={onCompletedClickHandler}/>
+                <div style={{display: 'flex', gap: '15px'}}>
+                    <Button variant={props.filter === 'all' ? "contained" : "outlined"}
+                            onClick={onAllClickHandler}
+                            size='small'
+                    >
+                        All</Button>
+                    <Button variant={props.filter === 'active' ? "contained" : "outlined"}
+                            onClick={onActiveClickHandler}
+                            size='small'
+                    >
+                        Active</Button>
+                    <Button variant={props.filter === 'completed' ? "contained" : "outlined"}
+                            onClick={onCompletedClickHandler}
+                            size='small'
+                    >
+                        Completed</Button>
+
                 </div>
             </>
             }
