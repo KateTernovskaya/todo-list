@@ -1,1 +1,49 @@
 .App{}
+
+.addTodolist {
+    width: 100%;
+    padding: 50px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+
+.todolistGallery {
+    width: 100%;
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.task-done {
+   opacity: 0.5;
+    text-decoration: line-through;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task {
+list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-block{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.title-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

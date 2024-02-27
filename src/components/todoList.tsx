@@ -1,13 +1,12 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useState, useRef, KeyboardEvent} from 'react';
 import {FilterValuesType} from "../App";
-import Button from '@mui/material/Button';
 import {AddItemForm} from "./addItemForm";
 import {EditableSpan} from "./editableSpan";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from '@mui/icons-material/Delete';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
+import {ButtonsControl} from "./button/buttonsControl";
+import {ButtonsFilter} from "./button/buttonsFilter";
+import {SuperCheckbox} from "./checkbox/superCheckbox";
 
 
 type TaskType = {
@@ -43,12 +42,30 @@ export function TodoList(props: TodoListPropsType) {
     const addTaskHandler = (newTitle: string) => {
         props.addTask(props.todoListID, newTitle)
     }
-
+    const onChangeTaskStatusHandler = (taskId: string, isDone: boolean) => {
+        props.changeTaskStatus(props.todoListID, taskId, isDone)
+    }
 
     //Filter
     const onAllClickHandler = () => props.changeFilter(props.todoListID, "all");
     const onActiveClickHandler = () => props.changeFilter(props.todoListID, "active");
     const onCompletedClickHandler = () => props.changeFilter(props.todoListID, "completed");
+
+    //edit text
+    const [edit, setEdit] = useState(false)
+    const [newTitle, setNewTitle] = useState(props.title)
+
+    const editTitleHandler = () => {
+        setEdit(!edit)
+        if (edit) {
+            updateTodoListTitleHandler(newTitle)
+            console.log(edit)
+        }
+    }
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewTitle(e.currentTarget.value)
+    }
 
 
     //IsHide
@@ -63,72 +80,88 @@ export function TodoList(props: TodoListPropsType) {
     const taskItems = props.tasks.length !== 0
         ? <ul>{props.tasks.map(t => {
             const RemoveTaskHandler = () => props.removeTask(props.todoListID, t.id)
-            const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
-            }
+            // const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            //     props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
+            // }
+            const [editTask, setEditTask] = useState(false)
+            const [newTitleTask, setNewTitleTask] = useState(t.title)
+
             const updateTaskTitleHandler = (newTitle: string) => {
                 props.updateTaskTitle(props.todoListID, t.id, newTitle)
             }
+            const editTaskHandler = () => {
+                if (editTask) {
+                    updateTaskTitleHandler(newTitleTask)
+                }
+                setEditTask(!editTask)
+            }
+            const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                setNewTitleTask(e.currentTarget.value)
+            }
+
             const taskClass = t.isDone ? 'task-done' : 'task'
 
             return (
-                <li key={t.id} className={taskClass}>
-                    <Checkbox onChange={onChangeTaskStatusHandler} checked={t.isDone}/>
-                    <EditableSpan oldTitle={t.title} callBack={updateTaskTitleHandler}/>
+                <li key={t.id} className={taskClass}
+                >
+                    {/*<Checkbox onChange={onChangeTaskStatusHandler} checked={t.isDone}/>*/}
+                    <SuperCheckbox checked={t.isDone}
+                                   onChange={(isDone)=>onChangeTaskStatusHandler(t.id, isDone)}
+                    />
 
-                    <IconButton aria-label="delete"
-                                onClick={RemoveTaskHandler}
-                                size="small">
-                        <DeleteIcon fontSize="inherit"/>
-                    </IconButton>
+                    <EditableSpan
+                        oldTitle={t.title}
+                        edit={editTask}
+                        newTitle={newTitleTask}
+                        editHandler={editTaskHandler}
+                        onChangeHandler={onChangeTaskHandler}
+                    />
+                    <ButtonsControl callbackDelete={RemoveTaskHandler}
+                                    callbackToggleEdit={editTaskHandler}
+                                    edit={editTask}
+                    />
                 </li>)
         })}</ul>
         : <span>No tasks for this filter type</span>
 
 
-
-
     return (
-        <div className='todo-list'>
-            <div className={'todo-list-title-block'}>
-                <EditableSpan oldTitle={props.title} callBack={updateTodoListTitleHandler} iconColor='primary'/>
-                <IconButton aria-label="hide tasks list"
-                            onClick={toggleHideTodoList}
-                            color='primary'>
-                    {isHide ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
-                </IconButton>
+        <Paper elevation={3} style={{padding: '30px', maxWidth: "280px", width: '100%'}}>
 
-                <IconButton aria-label="delete"
-                            onClick={removeTodoListHandler}
-                            color='primary'>
-                    <DeleteIcon/>
-                </IconButton>
+            <div className='title-block'>
+                <EditableSpan
+                    oldTitle={props.title}
+                    edit={edit}
+                    newTitle={newTitle}
+                    editHandler={editTitleHandler}
+                    onChangeHandler={onChangeHandler}
+                    isTitle
+                />
+                <ButtonsControl isTitle
+                                callbackDelete={removeTodoListHandler}
+                                callbackToggleEdit={editTitleHandler}
+                                callbackToggleHide={toggleHideTodoList}
+                                edit={edit}
+                                isHide={isHide}
+
+                />
             </div>
+
             {isHide && <div>{`There are ${countActiveTasksForHideMode} active tasks in the Todo-List`}</div>}
             {!isHide && <>
 
                 <AddItemForm callBack={addTaskHandler}/>
                 {taskItems}
-                <div style={{display: 'flex', gap: '15px'}}>
-                    <Button variant={props.filter === 'all' ? "contained" : "outlined"}
-                            onClick={onAllClickHandler}
-                            size='small'
-                    >
-                        All</Button>
-                    <Button variant={props.filter === 'active' ? "contained" : "outlined"}
-                            onClick={onActiveClickHandler}
-                            size='small'
-                    >
-                        Active</Button>
-                    <Button variant={props.filter === 'completed' ? "contained" : "outlined"}
-                            onClick={onCompletedClickHandler}
-                            size='small'
-                    >
-                        Completed</Button>
+                <ButtonsFilter filter={props.filter}
+                               allClick={onAllClickHandler}
+                               activeClick={onActiveClickHandler}
+                               completedClick={onCompletedClickHandler}
+                />
 
-                </div>
             </>
             }
-        </div>
+
+        </Paper>
+
     )
 }

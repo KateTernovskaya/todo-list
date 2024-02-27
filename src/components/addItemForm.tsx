@@ -10,7 +10,7 @@ type AddItemFormPropsType = {
 
 export const AddItemForm = (props: AddItemFormPropsType) => {
     const [title, setTitle] = useState("")
-   const [error, setError] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
@@ -41,7 +41,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
 
 
     return (
-        <div>
+        <div style={{padding: '20px 0'}}>
             <TextField id="outlined-basic"
                        error={!!error}
                        label={error ? error : "Enter text"}
