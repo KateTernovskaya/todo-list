@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
 import {v1} from 'uuid';
-import {TodoList} from "./components/todoList";
+import {TaskType, TodoList} from "./components/todoList";
 import {AddItemForm} from "./components/addItemForm";
 import {ButtonAppBar} from "./components/appBar";
 import {Container} from "./components/styled/container";
-import styled from "styled-components";
-
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodoListsType = {
@@ -15,29 +13,67 @@ export type TodoListsType = {
     filter: FilterValuesType
 }
 
+export type TasksStateType = {
+    [key: string]: TaskType[]
+}
 function App() {
     const todoListsId1 = v1()
     const todoListsId2 = v1()
+    const todoListsId3 = v1()
 
     const [todoLists, setTodoLists] = useState<Array<TodoListsType>>([
-        {id: todoListsId1, title: 'What to learn', filter: 'all'},
-        {id: todoListsId2, title: 'What to buy', filter: 'all'},
+        {id: todoListsId1, title: 'Разобранные заказы', filter: 'all'},
+        {id: todoListsId2, title: 'Фильмы', filter: 'all'},
+        {id: todoListsId2, title: 'Игры', filter: 'all'},
     ])
 
     const [tasks, setTasks] = useState({
         [todoListsId1]: [
-            {id: v1(), title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "ReactJS", isDone: false},
-            {id: v1(), title: "Rest API", isDone: false},
-            {id: v1(), title: "GraphQL", isDone: false},
+            {id: v1(), title: "17.12 Предзаказ от издательства Эксмо: Кельтские мифы", isDone: true},
+            {id: v1(), title: "10.01 Арина Цимеринг: Как поймать монстра", isDone: true},
+            {id: v1(), title: "29.01 Предзаказ от издательства АСТ: Правление Волков", isDone: true},
+            {id: v1(), title: "02.02 Оушен Паркер: Погребенные", isDone: false},
+            {id: v1(), title: "12.02 Предзаказ от издательства АСТ: Семь безликих святых", isDone: true},
+            {id: v1(), title: "26.02 Анастасия волжская, Валерия Яблонцева: Великое открытие Линнет найт", isDone: false},
+            {id: v1(), title: "13.03 ника Веймар: Дракон по вызову", isDone: false},
+            {id: v1(), title: "15.03 Предзаказ от издательства Эксмо: Индийские мифы", isDone: false},
+            {id: v1(), title: "24.03 Предзаказ от издательства Эксмо: Гордость и предубеждение", isDone: false},
         ],
         [todoListsId2]: [
-            {id: v1(), title: "HTML&CSS-2", isDone: true},
-            {id: v1(), title: "JS-2", isDone: true},
-            {id: v1(), title: "ReactJS-2", isDone: false},
-            {id: v1(), title: "Rest API-2", isDone: false},
-            {id: v1(), title: "GraphQL-2", isDone: false},
+            {id: v1(), title: "Рыцари зодиака", isDone: true},
+            {id: v1(), title: "Круче некуда", isDone: true},
+            {id: v1(), title: "Форсаж", isDone: true},
+            {id: v1(), title: "Дева и дракон", isDone: true},
+            {id: v1(), title: "Пчеловод", isDone: true},
+            {id: v1(), title: "Александр", isDone: false},
+            {id: v1(), title: "Троя", isDone: false},
+            {id: v1(), title: "Игра в имитацию", isDone: false},
+            {id: v1(), title: "Игра на понижение", isDone: false},
+            {id: v1(), title: "Нимона", isDone: false},
+            {id: v1(), title: "Жанна дюбари", isDone: false},
+            {id: v1(), title: "Любовь и смерть (сериал)", isDone: false},
+            {id: v1(), title: "Корабль призраков", isDone: false},
+            {id: v1(), title: "Два три демон приди", isDone: true},
+            {id: v1(), title: "Телохранитель на фрилансе", isDone: true},
+            {id: v1(), title: "Шантарам", isDone: false},
+            {id: v1(), title: "Поколение v", isDone: true},
+            {id: v1(), title: "Падение Дома ашеров", isDone: false},
+            {id: v1(), title: "Побег", isDone: false},
+            {id: v1(), title: "Рыцари готема", isDone: false},
+            {id: v1(), title: "Пригородные крики", isDone: false},
+            {id: v1(), title: "Камелот", isDone: false},
+            {id: v1(), title: "Без обид", isDone: false},
+            {id: v1(), title: "Убийца (Майкл фассбендер", isDone: false},
+        ],
+        [todoListsId3]: [
+            {id: v1(), title: "Мстители", isDone: false},
+            {id: v1(), title: "Человек паук", isDone: true},
+            {id: v1(), title: "Человек паук 2", isDone: false},
+            {id: v1(), title: "Стражи", isDone: false},
+            {id: v1(), title: "Dark pictures anthology", isDone: true},
+            {id: v1(), title: "Heavy rain", isDone: false},
+            {id: v1(), title: "A way out", isDone: false},
+            {id: v1(), title: "Гад оф вар", isDone: false},
         ],
     })
 

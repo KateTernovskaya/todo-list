@@ -1,15 +1,14 @@
-import React, {ChangeEvent, useState, useRef, KeyboardEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {FilterValuesType} from "../App";
 import {AddItemForm} from "./addItemForm";
 import {EditableSpan} from "./editableSpan";
-import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import {ButtonsControl} from "./button/buttonsControl";
 import {ButtonsFilter} from "./button/buttonsFilter";
 import {SuperCheckbox} from "./checkbox/superCheckbox";
 
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
@@ -55,7 +54,7 @@ export function TodoList(props: TodoListPropsType) {
     const [edit, setEdit] = useState(false)
     const [newTitle, setNewTitle] = useState(props.title)
 
-    const editTitleHandler = () => {
+       const editTitleHandler = () => {
         setEdit(!edit)
         if (edit) {
             updateTodoListTitleHandler(newTitle)
@@ -83,6 +82,8 @@ export function TodoList(props: TodoListPropsType) {
             // const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
             //     props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
             // }
+
+
             const [editTask, setEditTask] = useState(false)
             const [newTitleTask, setNewTitleTask] = useState(t.title)
 
@@ -99,12 +100,11 @@ export function TodoList(props: TodoListPropsType) {
                 setNewTitleTask(e.currentTarget.value)
             }
 
-            const taskClass = t.isDone ? 'task-done' : 'task'
+            const taskClass = t.isDone ? 'tasks-done' : 'tasks'
 
             return (
                 <li key={t.id} className={taskClass}
                 >
-                    {/*<Checkbox onChange={onChangeTaskStatusHandler} checked={t.isDone}/>*/}
                     <SuperCheckbox checked={t.isDone}
                                    onChange={(isDone)=>onChangeTaskStatusHandler(t.id, isDone)}
                     />
