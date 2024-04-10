@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useState} from 'react';
-import {FilterValuesType} from "../AppWithReducers";
 import {AddItemForm} from "./addItemForm";
 import {EditableSpan} from "./editableSpan";
 import Paper from '@mui/material/Paper';
@@ -10,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {changeTodoListFilterAC, changeTodoListTitleAC, removeTodoListAC} from "../state/todolist/todolists-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks/tasks-reducer";
+import {FilterValuesType} from "../AppWithRedux";
 
 
 export type TaskType = {

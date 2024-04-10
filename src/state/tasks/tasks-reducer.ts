@@ -1,5 +1,3 @@
-import {TaskType} from "../../components/todoList";
-import {TasksStateType} from "../../AppWithReducers";
 import {
     AddTodoListACType,
     RemoveTodoListACType,
@@ -8,6 +6,8 @@ import {
     todoListsId3
 } from "../todolist/todolists-reducer";
 import {v1} from 'uuid';
+import {TasksStateType} from "../../AppWithRedux";
+import {TaskType} from "../../components/todoListWithRedux";
 
 const initialState: TasksStateType = {
     [todoListsId1]: [
@@ -26,40 +26,16 @@ const initialState: TasksStateType = {
         {id: v1(), title: "24.03 Предзаказ от издательства Эксмо: Гордость и предубеждение", isDone: false},
     ],
     [todoListsId2]: [
-        {id: v1(), title: "Рыцари зодиака", isDone: true},
         {id: v1(), title: "Круче некуда", isDone: true},
-        {id: v1(), title: "Форсаж", isDone: true},
         {id: v1(), title: "Дева и дракон", isDone: true},
         {id: v1(), title: "Пчеловод", isDone: true},
         {id: v1(), title: "Александр", isDone: false},
         {id: v1(), title: "Троя", isDone: false},
-        {id: v1(), title: "Игра в имитацию", isDone: false},
-        {id: v1(), title: "Игра на понижение", isDone: false},
-        {id: v1(), title: "Нимона", isDone: false},
-        {id: v1(), title: "Жанна дюбари", isDone: false},
-        {id: v1(), title: "Любовь и смерть (сериал)", isDone: false},
-        {id: v1(), title: "Корабль призраков", isDone: false},
-        {id: v1(), title: "Два три демон приди", isDone: true},
-        {id: v1(), title: "Телохранитель на фрилансе", isDone: true},
-        {id: v1(), title: "Шантарам", isDone: false},
-        {id: v1(), title: "Поколение v", isDone: true},
-        {id: v1(), title: "Падение Дома ашеров", isDone: false},
-        {id: v1(), title: "Побег", isDone: false},
-        {id: v1(), title: "Рыцари готема", isDone: false},
-        {id: v1(), title: "Пригородные крики", isDone: false},
-        {id: v1(), title: "Камелот", isDone: false},
-        {id: v1(), title: "Без обид", isDone: false},
         {id: v1(), title: "Убийца (Майкл фассбендер", isDone: false},
     ],
     [todoListsId3]: [
         {id: v1(), title: "Мстители", isDone: false},
-        {id: v1(), title: "Человек паук", isDone: true},
-        {id: v1(), title: "Человек паук 2", isDone: false},
-        {id: v1(), title: "Стражи", isDone: false},
         {id: v1(), title: "Dark pictures anthology", isDone: true},
-        {id: v1(), title: "Heavy rain", isDone: false},
-        {id: v1(), title: "A way out", isDone: false},
-        {id: v1(), title: "Гад оф вар", isDone: false},
     ],
 }
 export const tasksReducer = (state = initialState, action: TasksReducerType): TasksStateType => {
@@ -111,7 +87,6 @@ export const tasksReducer = (state = initialState, action: TasksReducerType): Ta
             delete copyState[action.payload.id]
             return copyState
         }
-
         default:
             return state
     }

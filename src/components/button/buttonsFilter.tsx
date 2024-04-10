@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from "@mui/material/Button";
-import {FilterValuesType} from "../../AppWithReducers";
 import styled from 'styled-components';
+import {FilterValuesType} from "../../AppWithRedux";
 
 type ButtonFilterPropsType = {
     filter: FilterValuesType
