@@ -6,6 +6,10 @@ import Paper from '@mui/material/Paper';
 import {ButtonsControl} from "./button/buttonsControl";
 import {ButtonsFilter} from "./button/buttonsFilter";
 import {SuperCheckbox} from "./checkbox/superCheckbox";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../state/store";
+import {changeTodoListFilterAC, changeTodoListTitleAC, removeTodoListAC} from "../state/todolist/todolists-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks/tasks-reducer";
 
 
 export type TaskType = {
@@ -17,38 +21,49 @@ export type TaskType = {
 type TodoListPropsType = {
     todoListID: string
     title: string
-    tasks: Array<TaskType>
-    removeTask: (todoListID: string, taskID: string) => void
-    changeFilter: (todoListID: string, value: FilterValuesType) => void
-    addTask: (todoListID: string, title: string) => void
-    changeTaskStatus: (todoListID: string, taskId: string, isDone: boolean) => void
     filter: FilterValuesType
-    removeTodoList: (todoListID: string) => void
-    updateTaskTitle: (todoListID: string, taskId: string, newTitle: string) => void
-    updateTodoListTitle: (todoListID: string, newTitle: string) => void
 }
 
-export function TodoList(props: TodoListPropsType) {
+export function TodoListWithRedux(props: TodoListPropsType) {
+    let tasks = useSelector<AppRootStateType, TaskType[]>(
+        state => state.tasks[props.todoListID]
+    )
+
+    const dispatch = useDispatch()
 
     //TODOLIST
-    const removeTodoListHandler = () => props.removeTodoList(props.todoListID)
-    const updateTodoListTitleHandler = (newTitle: string) => {
-        props.updateTodoListTitle(props.todoListID, newTitle)
+    const removeTodoListHandler = () => {
+        dispatch(removeTodoListAC(props.todoListID))
     }
-
+    const updateTodoListTitleHandler = (newTitle: string) => {
+        dispatch(changeTodoListTitleAC(props.todoListID, newTitle))
+    }
 
     //TASK
     const addTaskHandler = (newTitle: string) => {
-        props.addTask(props.todoListID, newTitle)
+        dispatch(addTaskAC(props.todoListID, newTitle))
     }
     const onChangeTaskStatusHandler = (taskId: string, isDone: boolean) => {
-        props.changeTaskStatus(props.todoListID, taskId, isDone)
+        dispatch(changeTaskStatusAC(props.todoListID, taskId, isDone))
     }
 
     //Filter
-    const onAllClickHandler = () => props.changeFilter(props.todoListID, "all");
-    const onActiveClickHandler = () => props.changeFilter(props.todoListID, "active");
-    const onCompletedClickHandler = () => props.changeFilter(props.todoListID, "completed");
+    const onAllClickHandler = () => {
+        dispatch(changeTodoListFilterAC(props.todoListID,"all" ))
+    }
+    const onActiveClickHandler = () => {
+        dispatch(changeTodoListFilterAC(props.todoListID,"active" ))
+    }
+    const onCompletedClickHandler = () => {
+        dispatch(changeTodoListFilterAC(props.todoListID,"completed" ))
+    }
+
+    if (props.filter === "active") {
+        tasks = tasks.filter(t => !t.isDone);
+    }
+    if (props.filter === "completed") {
+        tasks = tasks.filter(t => t.isDone);
+    }
 
     //edit text
     const [edit, setEdit] = useState(false)
@@ -69,16 +84,20 @@ export function TodoList(props: TodoListPropsType) {
 
     //IsHide
     const [isHide, setIsHide] = useState(false)
-    const activeTasksCount = props.tasks.filter(task => !task.isDone).length;
+    const activeTasksCount = tasks.filter(task => !task.isDone).length;
     const countActiveTasksForHideMode = isHide ? activeTasksCount : null
     const toggleHideTodoList = () => {
         setIsHide(!isHide)
     }
 
+
+
     //MAP
-    const taskItems = props.tasks.length !== 0
-        ? <ul className='todo-list'> {props.tasks.map(t => {
-            const RemoveTaskHandler = () => props.removeTask(props.todoListID, t.id)
+    const taskItems = tasks.length !== 0
+        ? <ul className='todo-list'> {tasks.map(t => {
+            const RemoveTaskHandler = () => {
+                dispatch(removeTaskAC(props.todoListID, t.id))
+            }
             // const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
             //     props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
             // }
@@ -88,7 +107,7 @@ export function TodoList(props: TodoListPropsType) {
             const [newTitleTask, setNewTitleTask] = useState(t.title)
 
             const updateTaskTitleHandler = (newTitle: string) => {
-                props.updateTaskTitle(props.todoListID, t.id, newTitle)
+                dispatch(changeTaskTitleAC(props.todoListID, t.id, newTitle))
             }
             const editTaskHandler = () => {
                 if (editTask) {
@@ -101,6 +120,8 @@ export function TodoList(props: TodoListPropsType) {
             }
 
             const taskClass = t.isDone ? 'task-done' : 'task'
+
+
 
             return (
                 <li key={t.id} className={taskClass}
