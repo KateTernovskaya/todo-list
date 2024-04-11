@@ -5,7 +5,8 @@ import {
     removeTodoListAC,
     todolistsReducer,
 } from "./todolists-reducer";
-import {FilterValuesType, TodoListsType} from "../../AppWithRedux";
+import {FilterValuesType, TodoListsType} from "../types/types";
+
 
 const todoListsId1 = v1()
 const todoListsId2 = v1()

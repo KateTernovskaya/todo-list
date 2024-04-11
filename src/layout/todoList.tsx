@@ -1,34 +1,21 @@
 import React, {ChangeEvent, useState} from 'react';
-import {AddItemForm} from "./addItemForm";
-import {EditableSpan} from "./editableSpan";
+import {AddItemForm} from "../components/addItemForm";
+import {EditableSpan} from "../components/editableSpan";
 import Paper from '@mui/material/Paper';
-import {ButtonsControl} from "./button/buttonsControl";
-import {ButtonsFilter} from "./button/buttonsFilter";
-import {SuperCheckbox} from "./checkbox/superCheckbox";
+import {ButtonsControl} from "../components/buttons/buttonsControl";
+import {ButtonsFilter} from "../components/buttons/buttonsFilter";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {changeTodoListFilterAC, changeTodoListTitleAC, removeTodoListAC} from "../state/todolist/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks/tasks-reducer";
-import {FilterValuesType} from "../AppWithRedux";
+import {addTaskAC} from "../state/tasks/tasks-reducer";
+import {TaskType, TodoListPropsType} from "../state/types/types";
+import {Task} from "./task";
 
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-
-type TodoListPropsType = {
-    todoListID: string
-    title: string
-    filter: FilterValuesType
-}
-
-export function TodoListWithRedux(props: TodoListPropsType) {
+export function TodoList(props: TodoListPropsType) {
     let tasks = useSelector<AppRootStateType, TaskType[]>(
         state => state.tasks[props.todoListID]
     )
-
     const dispatch = useDispatch()
 
     //TODOLIST
@@ -43,19 +30,16 @@ export function TodoListWithRedux(props: TodoListPropsType) {
     const addTaskHandler = (newTitle: string) => {
         dispatch(addTaskAC(props.todoListID, newTitle))
     }
-    const onChangeTaskStatusHandler = (taskId: string, isDone: boolean) => {
-        dispatch(changeTaskStatusAC(props.todoListID, taskId, isDone))
-    }
 
     //Filter
     const onAllClickHandler = () => {
-        dispatch(changeTodoListFilterAC(props.todoListID,"all" ))
+        dispatch(changeTodoListFilterAC(props.todoListID, "all"))
     }
     const onActiveClickHandler = () => {
-        dispatch(changeTodoListFilterAC(props.todoListID,"active" ))
+        dispatch(changeTodoListFilterAC(props.todoListID, "active"))
     }
     const onCompletedClickHandler = () => {
-        dispatch(changeTodoListFilterAC(props.todoListID,"completed" ))
+        dispatch(changeTodoListFilterAC(props.todoListID, "completed"))
     }
 
     if (props.filter === "active") {
@@ -65,10 +49,9 @@ export function TodoListWithRedux(props: TodoListPropsType) {
         tasks = tasks.filter(t => t.isDone);
     }
 
-    //edit text
+    //edit TodoListTitle
     const [edit, setEdit] = useState(false)
     const [newTitle, setNewTitle] = useState(props.title)
-
     const editTitleHandler = () => {
         setEdit(!edit)
         if (edit) {
@@ -76,7 +59,6 @@ export function TodoListWithRedux(props: TodoListPropsType) {
             console.log(edit)
         }
     }
-
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
     }
@@ -91,61 +73,15 @@ export function TodoListWithRedux(props: TodoListPropsType) {
     }
 
 
-
     //MAP
     const taskItems = tasks.length !== 0
         ? <ul className='todo-list'> {tasks.map(t => {
-            const RemoveTaskHandler = () => {
-                dispatch(removeTaskAC(props.todoListID, t.id))
-            }
-            // const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            //     props.changeTaskStatus(props.todoListID, t.id, e.currentTarget.checked);
-            // }
-
-
-            const [editTask, setEditTask] = useState(false)
-            const [newTitleTask, setNewTitleTask] = useState(t.title)
-
-            const updateTaskTitleHandler = (newTitle: string) => {
-                dispatch(changeTaskTitleAC(props.todoListID, t.id, newTitle))
-            }
-            const editTaskHandler = () => {
-                if (editTask) {
-                    updateTaskTitleHandler(newTitleTask)
-                }
-                setEditTask(!editTask)
-            }
-            const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                setNewTitleTask(e.currentTarget.value)
-            }
-
-            const taskClass = t.isDone ? 'task-done' : 'task'
-
-
-
             return (
-                <li key={t.id} className={taskClass}
-                >
-                    <label className={'check-todo'}>
-                        <SuperCheckbox checked={t.isDone}
-                                       onChange={(isDone) => onChangeTaskStatusHandler(t.id, isDone)}
-                        />
-
-                        <EditableSpan
-                            oldTitle={t.title}
-                            edit={editTask}
-                            newTitle={newTitleTask}
-                            editHandler={editTaskHandler}
-                            onChangeHandler={onChangeTaskHandler}
-                        />
-                    </label>
-
-
-                    <ButtonsControl callbackDelete={RemoveTaskHandler}
-                                    callbackToggleEdit={editTaskHandler}
-                                    edit={editTask}
-                    />
-                </li>)
+                <Task todoListId={props.todoListID}
+                      taskId={t.id}
+                      title={t.title}
+                      isDone={t.isDone} />
+            )
         })}</ul>
         : <span>No tasks for this filter type</span>
 
@@ -168,7 +104,6 @@ export function TodoListWithRedux(props: TodoListPropsType) {
                                 callbackToggleHide={toggleHideTodoList}
                                 edit={edit}
                                 isHide={isHide}
-
                 />
             </div>
 
@@ -185,8 +120,6 @@ export function TodoListWithRedux(props: TodoListPropsType) {
 
             </>
             }
-
         </Paper>
-
     )
 }

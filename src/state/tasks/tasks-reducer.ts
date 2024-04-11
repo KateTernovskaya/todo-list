@@ -6,8 +6,8 @@ import {
     todoListsId3
 } from "../todolist/todolists-reducer";
 import {v1} from 'uuid';
-import {TasksStateType} from "../../AppWithRedux";
-import {TaskType} from "../../components/todoListWithRedux";
+import {TasksStateType, TaskType} from "../types/types";
+
 
 const initialState: TasksStateType = {
     [todoListsId1]: [
