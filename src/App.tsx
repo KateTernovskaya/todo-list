@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {AddItemForm} from "./components/addItemForm";
 import {ButtonAppBar} from "./components/appBar";
@@ -17,9 +17,9 @@ function App() {
     const dispatch = useDispatch()
 
     //TODOLIST
-    function addTodoList(title: string) {
+    const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListAC(title))
-    }
+    }, [dispatch])
 
     //MAP
     const mapTodoLists = todoLists.map(item => {

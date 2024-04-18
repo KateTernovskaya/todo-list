@@ -45,10 +45,9 @@ export const tasksReducer = (state = initialState, action: TasksReducerType): Ta
                 ...state,
                 [action.payload.todoListID]: state[action.payload.todoListID].filter(t => t.id !== action.payload.taskID)
             };
-
         }
         case "ADD-TASK": {
-            const taskID = '6'
+            const taskID = v1()
             let newTask: TaskType = {
                 id: taskID,
                 title: action.payload.title,

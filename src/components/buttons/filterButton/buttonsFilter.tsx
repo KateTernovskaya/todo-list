@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from "@mui/material/Button";
 import styled from 'styled-components';
-import {FilterValuesType} from "../../state/types/types";
+import {FilterValuesType} from "../../../state/types/types";
+import { MyFilterButton} from "./myFilterButton";
 
 
-type ButtonFilterPropsType = {
+type ButtonFilterPropsType = {  
     filter: FilterValuesType
     allClick: () => void
     activeClick: () => void
@@ -21,26 +21,26 @@ export const ButtonsFilter: React.FC<ButtonFilterPropsType> = (
 ) => {
     return (
         <StyledButtonsFilter>
-            <Button variant={filter === 'all' ? "contained" : "outlined"}
+            <MyFilterButton variant={filter === 'all' ? "contained" : "outlined"}
                     onClick={allClick}
                     size='small'
-            >
-                All
-            </Button>
+                      text={'All'}
+            />
 
-            <Button variant={filter === 'active' ? "contained" : "outlined"}
+            <MyFilterButton variant={filter === 'active' ? "contained" : "outlined"}
                     onClick={activeClick}
                     size='small'
-            >
-                Active
-            </Button>
+                      text={'Active'}
+            />
 
-            <Button variant={filter === 'completed' ? "contained" : "outlined"}
+
+            <MyFilterButton variant={filter === 'completed' ? "contained" : "outlined"}
                     onClick={completedClick}
                     size='small'
-            >
-                Completed
-            </Button>
+                      text={'Completed'}
+            />
+
+
         </StyledButtonsFilter>
     );
 };

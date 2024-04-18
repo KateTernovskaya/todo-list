@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo} from 'react';
 import TextField from "@mui/material/TextField";
 
 type EditableSpanPropsType = {
@@ -10,7 +10,7 @@ type EditableSpanPropsType = {
     onChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanPropsType> = (
+export const EditableSpan: React.FC<EditableSpanPropsType> = memo((
     {
         oldTitle,
         isTitle,
@@ -44,5 +44,5 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (
                 {isTitle ? <h3>{oldTitle}</h3> : <span> {oldTitle} </span>}
             </>
     );
-};
+});
 

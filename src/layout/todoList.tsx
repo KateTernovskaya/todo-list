@@ -1,9 +1,9 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, memo, useCallback, useMemo, useState} from 'react';
 import {AddItemForm} from "../components/addItemForm";
 import {EditableSpan} from "../components/editableSpan";
 import Paper from '@mui/material/Paper';
-import {ButtonsControl} from "../components/buttons/buttonsControl";
-import {ButtonsFilter} from "../components/buttons/buttonsFilter";
+import {ButtonsControl} from "../components/buttons/controlButton/buttonsControl";
+import {ButtonsFilter} from "../components/buttons/filterButton/buttonsFilter";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {changeTodoListFilterAC, changeTodoListTitleAC, removeTodoListAC} from "../state/todolist/todolists-reducer";
@@ -12,42 +12,57 @@ import {TaskType, TodoListPropsType} from "../state/types/types";
 import {Task} from "./task";
 
 
-export function TodoList(props: TodoListPropsType) {
+export const TodoList = memo((props: TodoListPropsType) => {
+
     let tasks = useSelector<AppRootStateType, TaskType[]>(
         state => state.tasks[props.todoListID]
     )
     const dispatch = useDispatch()
 
     //TODOLIST
-    const removeTodoListHandler = () => {
+    const removeTodoListHandler = useCallback(() => {
         dispatch(removeTodoListAC(props.todoListID))
-    }
-    const updateTodoListTitleHandler = (newTitle: string) => {
+    }, [dispatch, props.todoListID])
+    const updateTodoListTitleHandler = useCallback((newTitle: string) => {
         dispatch(changeTodoListTitleAC(props.todoListID, newTitle))
-    }
+    }, [dispatch, props.todoListID])
 
     //TASK
-    const addTaskHandler = (newTitle: string) => {
+    const addTaskHandler = useCallback((newTitle: string) => {
         dispatch(addTaskAC(props.todoListID, newTitle))
-    }
+    }, [dispatch, props.todoListID])
+
+    useMemo(() => {
+        tasks.sort((a, b) =>
+            (a.isDone > b.isDone ? 1 : a.isDone < b.isDone ? -1 : 0));
+        return tasks
+    }, [tasks.map(t => t.isDone)])
+
+    // tasks.sort((a, b) =>
+    //     (a.isDone > b.isDone ? 1 : a.isDone < b.isDone ? -1 : 0));
+
 
     //Filter
-    const onAllClickHandler = () => {
+    const onAllClickHandler = useCallback(() => {
         dispatch(changeTodoListFilterAC(props.todoListID, "all"))
-    }
-    const onActiveClickHandler = () => {
+    }, [dispatch, props.todoListID])
+    const onActiveClickHandler = useCallback(() => {
         dispatch(changeTodoListFilterAC(props.todoListID, "active"))
-    }
-    const onCompletedClickHandler = () => {
+    }, [dispatch, props.todoListID])
+    const onCompletedClickHandler = useCallback(() => {
         dispatch(changeTodoListFilterAC(props.todoListID, "completed"))
-    }
+    }, [dispatch, props.todoListID])
 
-    if (props.filter === "active") {
-        tasks = tasks.filter(t => !t.isDone);
-    }
-    if (props.filter === "completed") {
-        tasks = tasks.filter(t => t.isDone);
-    }
+    useMemo(() => {
+        if (props.filter === "active") {
+            tasks = tasks.filter(t => !t.isDone);
+        }
+        if (props.filter === "completed") {
+            tasks = tasks.filter(t => t.isDone);
+        }
+        return tasks
+    }, [props.filter])
+
 
     //edit TodoListTitle
     const [edit, setEdit] = useState(false)
@@ -56,12 +71,11 @@ export function TodoList(props: TodoListPropsType) {
         setEdit(!edit)
         if (edit) {
             updateTodoListTitleHandler(newTitle)
-            console.log(edit)
         }
     }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
-    }
+    }, [])
 
 
     //IsHide
@@ -77,10 +91,11 @@ export function TodoList(props: TodoListPropsType) {
     const taskItems = tasks.length !== 0
         ? <ul className='todo-list'> {tasks.map(t => {
             return (
-                <Task todoListId={props.todoListID}
+                <Task key={t.id}
+                      todoListId={props.todoListID}
                       taskId={t.id}
                       title={t.title}
-                      isDone={t.isDone} />
+                      isDone={t.isDone}/>
             )
         })}</ul>
         : <span>No tasks for this filter type</span>
@@ -122,4 +137,4 @@ export function TodoList(props: TodoListPropsType) {
             }
         </Paper>
     )
-}
+})

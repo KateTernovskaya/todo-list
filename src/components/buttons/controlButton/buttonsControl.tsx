@@ -1,10 +1,10 @@
 import React from 'react';
-import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DoneIcon from "@mui/icons-material/Done";
+import {MyIconButton} from "./myIconButton";
 
 type ButtonControlPropsType = {
     isTitle?: boolean
@@ -31,44 +31,44 @@ export const ButtonsControl: React.FC<ButtonControlPropsType> = (
         isTitle
             ?
             <div className='btn-block'>
-                <IconButton aria-label="hide tasks list"
+                <MyIconButton ariaLabel="hide tasks list"
                             onClick={callbackToggleHide}
                             color={isTitle ? 'primary' : 'default'}
                 >
                     {isHide ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/>}
-                </IconButton>
+                </MyIconButton>
 
-                <IconButton aria-label="delete"
+                <MyIconButton ariaLabel="delete"
                             onClick={callbackDelete}
                             color={isTitle ? 'primary' : 'default'}
                 >
                     <DeleteIcon/>
-                </IconButton>
+                </MyIconButton>
 
-                <IconButton aria-label="edit task"
+                <MyIconButton ariaLabel="edit task"
                             onClick={callbackToggleEdit}
                             size="small"
                             color={isTitle ? 'primary' : 'default'}
                 >
                     {edit ? <DoneIcon fontSize="inherit"/> : <ModeEditIcon fontSize="inherit"/>}
-                </IconButton>
+                </MyIconButton>
             </div>
             :
             <div className='btn-block'>
-                <IconButton aria-label="delete"
+                <MyIconButton ariaLabel="delete"
                             onClick={callbackDelete}
                             color={isTitle ? 'primary' : 'default'}
                 >
                     <DeleteIcon/>
-                </IconButton>
+                </MyIconButton>
 
-                <IconButton aria-label="edit task"
+                <MyIconButton ariaLabel="edit task"
                             onClick={callbackToggleEdit}
                             size="small"
                             color={isTitle ? 'primary' : 'default'}
                 >
                     {edit ? <DoneIcon fontSize="inherit"/> : <ModeEditIcon fontSize="inherit"/>}
-                </IconButton>
+                </MyIconButton>
             </div>
 
     );
