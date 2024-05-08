@@ -46,7 +46,7 @@ export const AddItemForm = memo((props: AddItemFormPropsType) => {
                        size='small'
                        value={title}
                        onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyUp={onKeyPressHandler}
             />
             <Button variant="contained"
                     style={btnStyles}

@@ -37,7 +37,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = memo((
                        onBlur={editHandler}
                        autoFocus
                        onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyUp={onKeyPressHandler}
             />
             :
             <>

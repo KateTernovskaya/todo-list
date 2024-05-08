@@ -38,9 +38,6 @@ export const TodoList = memo((props: TodoListPropsType) => {
         return tasks
     }, [tasks.map(t => t.isDone)])
 
-    // tasks.sort((a, b) =>
-    //     (a.isDone > b.isDone ? 1 : a.isDone < b.isDone ? -1 : 0));
-
 
     //Filter
     const onAllClickHandler = useCallback(() => {
@@ -102,7 +99,7 @@ export const TodoList = memo((props: TodoListPropsType) => {
 
 
     return (
-        <Paper elevation={3} style={{padding: '30px', maxWidth: "280px", width: '100%'}}>
+        <Paper elevation={3} style={{padding: '30px', maxWidth: "280px",height: '100%'}}>
 
             <div className='title-block'>
                 <EditableSpan
