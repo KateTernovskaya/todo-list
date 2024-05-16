@@ -1,5 +1,5 @@
 import {tasksReducer} from "./tasks/tasks-reducer";
-import {addTodoListAC, todolistsReducer} from "./todolist/todolists-reducer";
+import {addTodoListAC, todoListsReducer} from "./todolist/todo-lists-reducer";
 import {TasksStateType, TodoListsType} from "./types/types";
 
 
@@ -10,7 +10,7 @@ test('id should be equals', () => {
     const action = addTodoListAC('new todolist')
 
     const endTaskState = tasksReducer(startTasksState, action)
-    const endTodolistsState = todolistsReducer(startTodolistsState, action)
+    const endTodolistsState = todoListsReducer(startTodolistsState, action)
 
     const keys = Object.keys(endTaskState)
     const idFromTasks = keys[0]

@@ -4,6 +4,7 @@ import {EditableSpan} from "../components/editableSpan";
 import {ButtonsControl} from "../components/buttons/controlButton/buttonsControl";
 import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/tasks/tasks-reducer";
 import {useDispatch} from "react-redux";
+import {useAppDispatch} from "../state/store";
 
 
 type TaskPropsType = {
@@ -17,7 +18,7 @@ export const Task: React.FC<TaskPropsType> = memo((
         todoListId, taskId, title, isDone,
     }) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     //edit TaskTitle
     const [editTask, setEditTask] = useState(false)
@@ -47,6 +48,7 @@ export const Task: React.FC<TaskPropsType> = memo((
 
 
     const taskClass = isDone ? 'task-done' : 'task'
+
     return (
         <li key={taskId} className={taskClass}
         >

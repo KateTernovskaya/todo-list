@@ -1,45 +1,45 @@
 import {
     AddTodoListACType,
-    RemoveTodoListACType,
-    todoListsId1,
-    todoListsId2,
-    todoListsId3
-} from "../todolist/todolists-reducer";
+    RemoveTodoListACType, SetTodoListACType,
+} from "../todolist/todo-lists-reducer";
 import {v1} from 'uuid';
-import {TasksStateType, TaskType} from "../types/types";
+import {TasksStateType, TaskType, TodoListsType} from "../types/types";
 
 
-const initialState: TasksStateType = {
-    [todoListsId1]: [
-        {id: v1(), title: "17.12 Предзаказ от издательства Эксмо: Кельтские мифы", isDone: true},
-        {id: v1(), title: "10.01 Арина Цимеринг: Как поймать монстра", isDone: true},
-        {id: v1(), title: "29.01 Предзаказ от издательства АСТ: Правление Волков", isDone: true},
-        {id: v1(), title: "02.02 Оушен Паркер: Погребенные", isDone: false},
-        {id: v1(), title: "12.02 Предзаказ от издательства АСТ: Семь безликих святых", isDone: true},
-        {
-            id: v1(),
-            title: "26.02 Анастасия волжская, Валерия Яблонцева: Великое открытие Линнет найт",
-            isDone: false
-        },
-        {id: v1(), title: "13.03 ника Веймар: Дракон по вызову", isDone: false},
-        {id: v1(), title: "15.03 Предзаказ от издательства Эксмо: Индийские мифы", isDone: true},
-        {id: v1(), title: "24.03 Предзаказ от издательства Эксмо: Гордость и предубеждение", isDone: true},
-        {id: v1(), title: "12.04 Лена Обухова (лимитки): Академия за занавесью 1,2,4", isDone: false},
-        {id: v1(), title: "15.04 Предзаказ от издательства Эксмо: Неночь 1,2,3", isDone: false},
-    ],
-    [todoListsId2]: [
-        {id: v1(), title: "Круче некуда", isDone: true},
-        {id: v1(), title: "Дева и дракон", isDone: true},
-        {id: v1(), title: "Пчеловод", isDone: true},
-        {id: v1(), title: "Александр", isDone: false},
-        {id: v1(), title: "Троя", isDone: false},
-        {id: v1(), title: "Убийца (Майкл фассбендер", isDone: false},
-    ],
-    [todoListsId3]: [
-        {id: v1(), title: "Мстители", isDone: false},
-        {id: v1(), title: "Dark pictures anthology", isDone: true},
-    ],
-}
+// const initialState: TasksStateType = {
+//     [todoListsId1]: [
+//         {id: v1(), title: "17.12 Предзаказ от издательства Эксмо: Кельтские мифы", isDone: true},
+//         {id: v1(), title: "10.01 Арина Цимеринг: Как поймать монстра", isDone: true},
+//         {id: v1(), title: "29.01 Предзаказ от издательства АСТ: Правление Волков", isDone: true},
+//         {id: v1(), title: "02.02 Оушен Паркер: Погребенные", isDone: false},
+//         {id: v1(), title: "12.02 Предзаказ от издательства АСТ: Семь безликих святых", isDone: true},
+//         {
+//             id: v1(),
+//             title: "26.02 Анастасия волжская, Валерия Яблонцева: Великое открытие Линнет найт",
+//             isDone: false
+//         },
+//         {id: v1(), title: "13.03 ника Веймар: Дракон по вызову", isDone: false},
+//         {id: v1(), title: "15.03 Предзаказ от издательства Эксмо: Индийские мифы", isDone: true},
+//         {id: v1(), title: "24.03 Предзаказ от издательства Эксмо: Гордость и предубеждение", isDone: true},
+//         {id: v1(), title: "12.04 Лена Обухова (лимитки): Академия за занавесью 1,2,4", isDone: false},
+//         {id: v1(), title: "15.04 Предзаказ от издательства Эксмо: Неночь 1,2,3", isDone: false},
+//     ],
+//     [todoListsId2]: [
+//         {id: v1(), title: "Круче некуда", isDone: true},
+//         {id: v1(), title: "Дева и дракон", isDone: true},
+//         {id: v1(), title: "Пчеловод", isDone: true},
+//         {id: v1(), title: "Александр", isDone: false},
+//         {id: v1(), title: "Троя", isDone: false},
+//         {id: v1(), title: "Убийца (Майкл фассбендер", isDone: false},
+//     ],
+//     [todoListsId3]: [
+//         {id: v1(), title: "Мстители", isDone: false},
+//         {id: v1(), title: "Dark pictures anthology", isDone: true},
+//     ],
+// }
+
+const initialState: TasksStateType = {}
+
 export const tasksReducer = (state = initialState, action: TasksReducerType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
@@ -88,6 +88,13 @@ export const tasksReducer = (state = initialState, action: TasksReducerType): Ta
             delete copyState[action.payload.id]
             return copyState
         }
+        case "SET-TODOLIST":{
+            const copy = {...state}
+            action.todoLists.forEach((tl)=> {
+                state[tl.id] = []
+            })
+            return copy
+        }
         default:
             return state
     }
@@ -99,6 +106,7 @@ export type TasksReducerType = RemoveTaskACType
     | ChangeTaskStatusACType
     | AddTodoListACType
     | RemoveTodoListACType
+    | SetTodoListACType
 
 
 type RemoveTaskACType = ReturnType<typeof removeTaskAC>
